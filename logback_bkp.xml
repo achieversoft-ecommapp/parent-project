@@ -1,0 +1,79 @@
+<configuration>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg [trace=%X{traceId:-}, parentId=%X{parentId:-}, spanId=%X{spanId:-}]%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <file>C:/Users/ranja/training_24-25/achieversoft/logs/app.log</file>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg [traceId=%X{traceId:-}, parentId=%X{parentId:-}, spanId=%X{spanId:-}]%n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="info">
+        <appender-ref ref="FILE" />
+        <appender-ref ref="STDOUT" />
+    </root>
+
+</configuration>
+
+
+
+<configuration>
+<!-- Import the parent configuration -->
+<!--<include resource="C:/Users/ranja/training_24-25/achieversoft/ecommapp/parent-project/logback-spring.xml" />-->
+
+<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+        <!--<jsonGeneratorDecorator class="net.logstash.logback.decorate.JsonGeneratorDecorator" />-->
+
+        <!--<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>-->
+        <providers>
+            <timestamp>
+                <fieldName>timestamp</fieldName>
+                <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg [traceId=%X{traceId:-}, spanId=%X{spanId:-}]%n</pattern>
+            </timestamp>
+            <logLevel>
+                <fieldName>level</fieldName>
+            </logLevel>
+            <loggerName>
+                <fieldName>logger</fieldName>
+            </loggerName>
+            <threadName>
+                <fieldName>thread</fieldName>
+            </threadName>
+            <message>
+                <fieldName>message</fieldName>
+            </message>
+            <mdc />
+            <stackTrace>
+                <fieldName>stackTrace</fieldName>
+            </stackTrace>
+        </providers>
+    </encoder>
+</appender>
+<appender name="asyncConsole" class="ch.qos.logback.classic.AsyncAppender">
+    <appender-ref ref="STDOUT" />
+    <queueSize>5000</queueSize>
+    <discardingThreshold>0</discardingThreshold>
+    <blocking>false</blocking>
+    <maxFlushTime>1000</maxFlushTime>
+</appender>
+
+<!--<appender name="FILE" class="ch.qos.logback.core.FileAppender">
+    <file>C:/Users/ranja/training_24-25/achieversoft/logs/app.log</file>
+    <encoder>
+        <pattern>%d{"yyyy-MM-dd HH:mm:ss"} [%thread] %-5level %logger{36} - %msg%n</pattern>
+    </encoder>
+</appender>-->
+
+<root level="info">
+    <!--<appender-ref ref="FILE" />-->
+    <appender-ref ref="STDOUT" />
+</root>
+
+</configuration>
+
